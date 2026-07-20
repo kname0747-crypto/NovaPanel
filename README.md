@@ -1,8 +1,6 @@
-# ✨ SPEEDSMM VERSIYON 5 YAYINDA 1 AYLIK UCRETSIZ KULLANIM ICIN [TIKLA](https://speedsmm.com) ✨
+# ✨ SPEEDSMM VERSIYON 5 YAYINDA 1 AYLIK UCRETSIZ KULLANIM ICIN [TIKLA](https://quickpanel.net) ✨
 
-# ✨ SPEEDSMM VERSION 5 IS LIVE FOR 1 MONTH FREE USE [CLICK](https://speedsmm.com) ✨
-
-![image](https://github.com/user-attachments/assets/199b2a82-de82-438c-b7bd-21bcca500336)
+# ✨ SPEEDSMM VERSION 5 IS LIVE FOR 1 MONTH FREE USE [CLICK](https://quickpanel.net) ✨
 
 
 # SpeedSmm_v3
@@ -73,8 +71,8 @@ SpeedSmm Versiyon 3 Kaynak Kodları - SMM PANEL / SpeedSmm Version 3 Source Code
 
 
 ---
-- ✨ [For Support](https://github.com/sponsors/fastuptime) <br>
-- 💕 [Discord](https://fastuptime.com/discord)<br>
+- ✨ [For Support](https://github.com/sponsors/codedByCan) <br>
+- 💕 [Discord](https://quiclpanel.net/social/discord)<br>
 - 🏓 [Fast Uptime](https://fastuptime.com/)<br>
 - 🪄 All kinds of projects are made <br>
 - 🧨 You can contact us to make a paid project<br>
