@@ -103,13 +103,18 @@ router.post('/auth/register', async (req, res) => {
     let bal = 0;
     if (siteData.site.modules.freeBalance.status) bal = siteData.site.modules.freeBalance.price;
 
+    // Kullanıcının _id'sini önceden üretiyoruz: aşağıdaki referans bloğu, henüz
+    // oluşturulmamış `user` değişkenine (TDZ) erişmeye çalışıyordu ve referral
+    // modülü açıkken her register isteğinde sunucuyu çökertiyordu.
+    const newUserId = new mongoose.Types.ObjectId();
+
     let reffered;
     if(siteData.site.modules.referral.status) {
         if(req.cookies.ref) {
             let ref = await userModel.findOne({ "ref.ref_code": req.cookies.ref });
             if(ref) {
                 reffered = ref._id;
-                await userModel.updateOne({ _id: ref._id }, { $inc: { "ref.reffered": 1 }, $push: { "ref.reffered_users": { _id: user._id, username: username, date: moment().format('DD MMMM YYYY HH:mm:ss') } } });
+                await userModel.updateOne({ _id: ref._id }, { $inc: { "ref.reffered": 1 }, $push: { "ref.reffered_users": { _id: newUserId, username: username, date: moment().format('DD MMMM YYYY HH:mm:ss') } } });
             }
         }
     }
@@ -117,6 +122,7 @@ router.post('/auth/register', async (req, res) => {
     speedAnalytics.run('register', 1); // İstatistik için
 
     let user = new userModel({
+        _id: newUserId,
         username,
         name,
         surname,
@@ -139,7 +145,10 @@ router.post('/auth/register', async (req, res) => {
                 date: moment().format('DD MMMM YYYY HH:mm:ss'),
                 action: "Register",
                 status: "Success",
-                userID: user._id,
+                // userID kaldırıldı: bu, kullanıcının kendi log kaydı içinde henüz
+                // atanmamış `user` değişkenine (TDZ) erişmeye çalışıyordu ve her
+                // register isteğinde ReferenceError ile sunucuyu çökertiyordu.
+                // Zaten bu log kendi `logs` dizisinin içinde olduğu için gereksizdi.
                 details: {
                     userAgent: req.headers['user-agent'],
                     referer: req.headers['referer'] || req.headers['referrer']
@@ -243,13 +252,21 @@ router.post('/auth/login', async (req, res) => {
     return res.json({ status: "200", message: "Giriş Başarılı" });
 });
 
+// Not: Bu endpoint adından ("platforms/get") farklı olarak, seçilen platforma ait
+// KATEGORİLERİ döndürür - newOrder.js/services.js dropdown zincirinde platform
+// seçilince kategori listesini doldurmak için böyle kullanılıyor. Eskiden
+// platformModel.findOne({ id, status:true }) çalıştırıyordu; platform şemasında
+// "status" diye bir alan hiç yoktu (asıl alan "visible"), bu yüzden hiçbir zaman
+// eşleşme bulamıyor ve her zaman "Platform Bulunamadı" dönüyordu. Kategori şemasına
+// da "platform" alanı olmadığından cascade zaten hiç kurulamamıştı.
 router.get('/platforms/get/:id', async (req, res) => {
     let id = req.params.id;
     if(!id) return res.json({ status: "400", message: "Platform Bulunamadı" });
     if(isNaN(id)) return res.json({ status: "400", message: "Platform Bulunamadı" });
-    let data = await platformModel.findOne({ id: id, status: true });
-    if(!data) return res.json({ status: "400", message: "Platform Bulunamadı" });
-    return res.json({ status: "200", message: "Platform Bulundu", data: data });
+    let platform = await platformModel.findOne({ id: id, visible: true });
+    if(!platform) return res.json({ status: "400", message: "Platform Bulunamadı" });
+    let data = await categoryModel.find({ platform: id, visible: true }).sort({ queue: 1 });
+    return res.json({ status: "200", message: "Kategoriler Bulundu", data: data.map(x => { return { id: x.id, name: x.name } }) });
 });
 
 router.get('/services/get/:service', async (req, res) => {
@@ -260,8 +277,8 @@ router.get('/services/get/:service', async (req, res) => {
     if(!data) return res.json({ status: "400", message: "Servis Bulunamadı" });
     let category = await categoryModel.findOne({ id: service });
     if(!category) return res.json({ status: "400", message: "Servis Bulunamadı" });
-    if(data.length < 1) return res.json({ status: "200", message: "Servis Bulunamadı", category: category.description,  data: [{ id: 0, name: "Servis Bulunamadı", price: 0, min: 0, max: 0, description: "Servis Bulunamadı", category: 0 }] });
-    return res.json({ status: "200", message: "Servis Bulundu", category: category.description, data: data.map(x => { return { id: x.id, name: x.name, price: x.price, min: x.min, max: x.max, description: x.description, category: x.category } }) });
+    if(data.length < 1) return res.json({ status: "200", message: "Servis Bulunamadı", category: category.description,  data: [{ id: 0, name: "Servis Bulunamadı", price: 0, min: 0, max: 0, description: "Servis Bulunamadı", category: 0, type: "Default", refill: false }] });
+    return res.json({ status: "200", message: "Servis Bulundu", category: category.description, data: data.map(x => { return { id: x.id, name: x.name, price: x.price, min: x.min, max: x.max, description: x.description, category: x.category, type: x.type, refill: x.refill } }) });
 });
 
 router.post('/service/get/:service', async (req, res) => {

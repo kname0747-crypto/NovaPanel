@@ -5,14 +5,14 @@ const nodemailer = require("nodemailer");
 sendMail.run(app,
     false
 {
-    to: "fastuptime@gmail.com",
-    name: "Can",
-    link: "https://fastuptime.net"
+    to: "info@example.com",
+    name: "Kullanıcı",
+    link: "https://example.com"
 }).then((data) => {
     console.log(data);
 });
 
-[Plugin] Yapımcı: Can, sendMail(1.0.0) yuklendi.
+[Plugin] Yapımcı: novapanel, sendMail(1.0.0) yuklendi.
 {
   status: true,
   message: 'Mail başarıyla gönderildi.',
@@ -26,7 +26,7 @@ sendMail.run(app,
 module.exports =  {
     name: "sendMail",
     version: "1.0.0",
-    author: "Can",
+    author: "novapanel",
     run: async function (app, auth, data) {
         if (!siteData.site.mail.status) return sendNotification.run(siteAdmins, { title: "Mail gönderilemedi.", message: "Mail sistemi aktif değil. #1" })  && { status: false, message: "Mail sistemi aktif değil." };
         if(!data.to) return { status: false, message: "Lütfen geçerli bir mail adresi giriniz." }

@@ -119,7 +119,7 @@
 
                   <div class="mb-3">
                     <label for="service" class="form-label"><%= __("newOrder.page.service") %></label>
-                    <select class="js-example-basic-single form-select" data-width="100%" name="service" id="newOrderService">
+                    <select class="js-example-basic-single2 form-select" data-width="100%" name="service" id="newOrderService">
                       <option value="0"><%= __("newOrder.page.noService") %></option>
                     </select>
                   </div>
@@ -137,6 +137,7 @@
                   <div class="mb-3">
                     <label for="quantity" class="form-label"><%= __("newOrder.page.quantity") %></label>
                     <input type="number" class="form-control" name="quantity" id="newOrderQuantity" step="10" value="10">
+                    <small class="text-muted">Min: <span id="newOrderMin">-</span> / Max: <span id="newOrderMax">-</span></small>
                   </div>
 
                   <div class="mb-3">

@@ -4,7 +4,15 @@ global.app = express();
 global.mongoose = require('mongoose');
 global.Schema = mongoose.Schema;
 global.moment = require('moment');
-global.crypto = require('crypto');
+// Node 19+ globalThis.crypto salt-okunur bir getter (Web Crypto API) olduğu için
+// düz atama (global.crypto = ...) sessizce yok sayılıyor ve kod hâlâ Web Crypto
+// nesnesini görüyor (randomBytes yok). defineProperty ile gerçekten değiştiriyoruz.
+Object.defineProperty(global, 'crypto', {
+    value: require('crypto'),
+    writable: true,
+    configurable: true,
+    enumerable: true
+});
 global.colors = require('colors');
 global.axios = require('axios');
 global.cron = require('node-cron');
@@ -127,5 +135,5 @@ let plugins = [
 require('./cron/jobs.js')(this);
 
 app.listen(config.port, function () {
-    console.log(`SpeedSmm V3 Scripti ${config.port} portunda calisiyor.`);
+    console.log(`NovaPanel Scripti ${config.port} portunda calisiyor.`);
 });

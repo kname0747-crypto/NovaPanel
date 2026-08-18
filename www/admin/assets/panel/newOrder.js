@@ -48,7 +48,8 @@ $(".js-example-basic-single2").on("select2:select", function (e) {
         if (res.status === "200") {
             document.getElementById("newOrderMin").innerHTML = res.data[0].min;
             document.getElementById("newOrderMax").innerHTML = res.data[0].max;
-            document.getElementById("newOrderPrice").innerHTML = res.data[0].price;
+            // newOrderPrice bir <input>, .innerHTML değil .value ile set edilmeli
+            document.getElementById("newOrderPrice").value = res.data[0].price;
         }
     });
 });

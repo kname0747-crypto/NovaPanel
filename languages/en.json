@@ -148,5 +148,20 @@
 	"admin.orders.page.table.remains": "admin.orders.page.table.remains",
 	"admin.orders.page.table.refill": "admin.orders.page.table.refill",
 	"admin.orders.page.table.status": "admin.orders.page.table.status",
-	"admin.orders.page.table.actions": "admin.orders.page.table.actions"
+	"admin.orders.page.table.actions": "admin.orders.page.table.actions",
+	"services.page.title": "Services",
+	"services.page.description": "Browse all the services we offer and their prices by selecting a platform and category.",
+	"services.page.platform": "Platform",
+	"services.page.category": "Category",
+	"services.page.noPlatform": "No Platform Found",
+	"services.page.noCategory": "Select a Category",
+	"services.page.selectCategoryFirst": "Select a platform and a category first to see the services.",
+	"services.page.table.id": "ID",
+	"services.page.table.name": "Service Name",
+	"services.page.table.min": "Min",
+	"services.page.table.max": "Max",
+	"services.page.table.price": "Price (per 1000)",
+	"services.page.table.type": "Type",
+	"services.page.table.refill": "Refill",
+	"services.page.table.noServices": "No services found in this category."
 }

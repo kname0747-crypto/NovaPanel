@@ -1,10 +1,10 @@
 module.exports =  {
     name: "fastexchange",
     version: "1.0.0",
-    author: "Can",
+    author: "novapanel",
     run: async function () {
         const apiExchange = {
-            api: 'https://fastexchangerateapi.fevehex882.repl.co', //Anlık kur bilgileri API Ağı Github Üzerinde yayınladım github.com/fastuptime FastExchangeRateAPI
+            api: 'https://your-exchange-rate-api.example.com', //Anlık kur bilgileri API adresi - kendi kur API'nizi girin
             key: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx',
         };
 

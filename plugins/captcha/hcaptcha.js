@@ -2,7 +2,7 @@ const { verify } = require('hcaptcha');
 module.exports =  {
     name: "hcaptcha",
     version: "1.0.0",
-    author: "Can",
+    author: "novapanel",
     run: async function (app, token) {
         if(!token) return { status: false, message: "Token Bulunamadı" };
         if(!siteData.site.integrations.captcha.status) return { status: false, message: "Captcha Sistemi Aktif Değil" };

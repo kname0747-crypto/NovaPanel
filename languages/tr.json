@@ -218,5 +218,20 @@
 	"admin.support.page.noSupport": "Talep Bulunamadı.",
 	"admin.support.page.Requests": "Talepler",
 	"admin.support.page.RequestsDescription": "Taleplerin durumunu buradan takip edebilirsiniz.",
-	"admin.support.page.responded": "Kullanıcı Cevapladı"
+	"admin.support.page.responded": "Kullanıcı Cevapladı",
+	"services.page.title": "Servisler",
+	"services.page.description": "Platform ve kategori seçerek sunduğumuz tüm servisleri ve fiyatlarını inceleyebilirsiniz.",
+	"services.page.platform": "Platform",
+	"services.page.category": "Kategori",
+	"services.page.noPlatform": "Platform Bulunamadı",
+	"services.page.noCategory": "Kategori Seçiniz",
+	"services.page.selectCategoryFirst": "Servisleri görmek için önce bir platform ve kategori seçiniz.",
+	"services.page.table.id": "ID",
+	"services.page.table.name": "Servis Adı",
+	"services.page.table.min": "Min",
+	"services.page.table.max": "Max",
+	"services.page.table.price": "Fiyat (1000 adet)",
+	"services.page.table.type": "Tip",
+	"services.page.table.refill": "Refill",
+	"services.page.table.noServices": "Bu kategoride servis bulunamadı."
 }

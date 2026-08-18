@@ -22,7 +22,7 @@ netGsm.run(app,
 module.exports =  {
     name: "netGsm",
     version: "1.0.0",
-    author: "Can",
+    author: "novapanel",
     run: async function (app, auth, data) {
         if (!siteData.site.number.status) return sendNotification.run(siteAdmins, { title: "Onay Kodu Gönderilemedi.", message: `Sistem Kapalı #1` }) && { status: false, message: "SMS sistemi aktif değil." }
         if (!data.to || data.to.length != 10 || isNaN(data.to)) return { status: false, message: "Lütfen geçerli bir telefon numarası giriniz. (5xxxxxxxxx)" }

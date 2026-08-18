@@ -1,0 +1,329 @@
+<%- include('../partials/_header.ejs') -%>
+
+		<!-- sidebar -->
+    <%- include('../partials/_sidebar.ejs') -%>
+		<!-- sidebar -->
+
+		<div class="page-wrapper">
+
+			<!-- partial:partials/_navbar.html -->
+      <%- include('../partials/_navbar.ejs') -%>
+			<!-- partial -->
+
+			<div class="page-content">
+
+        <% if (typeof success !== 'undefined' && success !== undefined) { %>
+          <div class="alert <%= success === 'true' ? 'alert-success' : 'alert-danger' %>" role="alert">
+            <%= message %>
+          </div>
+        <% } %>
+
+        <!-- PLATFORMLAR -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+          <h4 class="mb-3">Platformlar</h4>
+          <button type="button" class="btn btn-success btn-icon-text mb-2 mb-md-0" data-bs-toggle="modal" data-bs-target="#addPlatformModal">
+            <i class="fa-solid fa-plus btn-icon-prepend"></i>
+            Platform Ekle
+          </button>
+        </div>
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card" style="border-radius: 1rem;">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Ad</th>
+                      <th>Sıra</th>
+                      <th>Görünür</th>
+                      <th>İşlem</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (platforms.length == 0) { %>
+                      <tr><td colspan="5" style="text-align:center;">Henüz platform eklenmedi.</td></tr>
+                    <% } %>
+                    <% platforms.forEach(p => { %>
+                      <tr>
+                        <td><%= p.id %></td>
+                        <td><%= p.name %></td>
+                        <td><%= p.queue %></td>
+                        <td>
+                          <% if (p.visible) { %>
+                            <span class="badge bg-success">Evet</span>
+                          <% } else { %>
+                            <span class="badge bg-secondary">Hayır</span>
+                          <% } %>
+                        </td>
+                        <td>
+                          <form method="POST" action="/admin/services/platform/<%= p.id %>/delete" onsubmit="return confirm('Bu platform ve altındaki tüm kategori/servisler silinecek. Emin misiniz?');">
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+                          </form>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KATEGORİLER -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+          <h4 class="mb-3">Kategoriler</h4>
+          <button type="button" class="btn btn-success btn-icon-text mb-2 mb-md-0" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+            <i class="fa-solid fa-plus btn-icon-prepend"></i>
+            Kategori Ekle
+          </button>
+        </div>
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card" style="border-radius: 1rem;">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Platform</th>
+                      <th>Ad</th>
+                      <th>Sıra</th>
+                      <th>Görünür</th>
+                      <th>İşlem</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (categories.length == 0) { %>
+                      <tr><td colspan="6" style="text-align:center;">Henüz kategori eklenmedi.</td></tr>
+                    <% } %>
+                    <% categories.forEach(c => { %>
+                      <% let plat = platforms.find(p => p.id === c.platform); %>
+                      <tr>
+                        <td><%= c.id %></td>
+                        <td><%= plat ? plat.name : ('#' + c.platform + ' (silinmiş)') %></td>
+                        <td><%= c.name %></td>
+                        <td><%= c.queue %></td>
+                        <td>
+                          <% if (c.visible) { %>
+                            <span class="badge bg-success">Evet</span>
+                          <% } else { %>
+                            <span class="badge bg-secondary">Hayır</span>
+                          <% } %>
+                        </td>
+                        <td>
+                          <form method="POST" action="/admin/services/category/<%= c.id %>/delete" onsubmit="return confirm('Bu kategori ve altındaki tüm servisler silinecek. Emin misiniz?');">
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+                          </form>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SERVİSLER -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+          <h4 class="mb-3">Servisler</h4>
+          <button type="button" class="btn btn-success btn-icon-text mb-2 mb-md-0" data-bs-toggle="modal" data-bs-target="#addServiceModal">
+            <i class="fa-solid fa-plus btn-icon-prepend"></i>
+            Servis Ekle
+          </button>
+        </div>
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card" style="border-radius: 1rem;">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table id="dataTableExample" class="table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Kategori</th>
+                      <th>Ad</th>
+                      <th>Fiyat</th>
+                      <th>Min</th>
+                      <th>Max</th>
+                      <th>Tip</th>
+                      <th>Refill</th>
+                      <th>İşlem</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (services.length == 0) { %>
+                      <tr><td colspan="9" style="text-align:center;">Henüz servis eklenmedi.</td></tr>
+                    <% } %>
+                    <% services.forEach(s => { %>
+                      <% let cat = categories.find(c => c.id === s.category); %>
+                      <tr>
+                        <td><%= s.id %></td>
+                        <td><%= cat ? cat.name : ('#' + s.category + ' (silinmiş)') %></td>
+                        <td><%= s.name %></td>
+                        <td><%= s.price %></td>
+                        <td><%= s.min %></td>
+                        <td><%= s.max %></td>
+                        <td><%= s.type %></td>
+                        <td>
+                          <% if (s.refill) { %>
+                            <span class="badge bg-success">Evet</span>
+                          <% } else { %>
+                            <span class="badge bg-secondary">Hayır</span>
+                          <% } %>
+                        </td>
+                        <td>
+                          <form method="POST" action="/admin/services/service/<%= s.id %>/delete" onsubmit="return confirm('Bu servis silinecek. Emin misiniz?');">
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+                          </form>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL - PLATFORM EKLE -->
+        <div class="modal fade" id="addPlatformModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form method="POST" action="/admin/services/platform">
+                <div class="modal-header">
+                  <h5 class="modal-title"><i class="fa-solid fa-plus"></i> Platform Ekle</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label for="p_name">Platform Adı</label>
+                    <input type="text" class="form-control" name="name" id="p_name" required placeholder="Örn: Instagram">
+                  </div><br>
+                  <div class="form-group">
+                    <label for="p_queue">Sıra</label>
+                    <input type="number" class="form-control" name="queue" id="p_queue" placeholder="Boş bırakılırsa otomatik">
+                  </div><br>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="visible" id="p_visible" checked>
+                    <label class="form-check-label" for="p_visible">Görünür</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                  <button type="submit" class="btn btn-primary">Oluştur</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL - KATEGORİ EKLE -->
+        <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form method="POST" action="/admin/services/category">
+                <div class="modal-header">
+                  <h5 class="modal-title"><i class="fa-solid fa-plus"></i> Kategori Ekle</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label for="c_platform">Platform</label>
+                    <select class="form-control" name="platform" id="c_platform" required>
+                      <option value="">Platform Seçiniz</option>
+                      <% platforms.forEach(p => { %>
+                        <option value="<%= p.id %>"><%= p.name %></option>
+                      <% }); %>
+                    </select>
+                  </div><br>
+                  <div class="form-group">
+                    <label for="c_name">Kategori Adı</label>
+                    <input type="text" class="form-control" name="name" id="c_name" required placeholder="Örn: Takipçi">
+                  </div><br>
+                  <div class="form-group">
+                    <label for="c_description">Açıklama</label>
+                    <textarea class="form-control" name="description" id="c_description" rows="2"></textarea>
+                  </div><br>
+                  <div class="form-group">
+                    <label for="c_queue">Sıra</label>
+                    <input type="number" class="form-control" name="queue" id="c_queue" placeholder="Boş bırakılırsa otomatik">
+                  </div><br>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="visible" id="c_visible" checked>
+                    <label class="form-check-label" for="c_visible">Görünür</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                  <button type="submit" class="btn btn-primary">Oluştur</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL - SERVİS EKLE -->
+        <div class="modal fade" id="addServiceModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form method="POST" action="/admin/services/service">
+                <div class="modal-header">
+                  <h5 class="modal-title"><i class="fa-solid fa-plus"></i> Servis Ekle</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label for="s_category">Kategori</label>
+                    <select class="form-control" name="category" id="s_category" required>
+                      <option value="">Kategori Seçiniz</option>
+                      <% categories.forEach(c => { %>
+                        <option value="<%= c.id %>"><%= c.name %></option>
+                      <% }); %>
+                    </select>
+                  </div><br>
+                  <div class="form-group">
+                    <label for="s_name">Servis Adı</label>
+                    <input type="text" class="form-control" name="name" id="s_name" required placeholder="Örn: Instagram Türk Takipçi">
+                  </div><br>
+                  <div class="row mb-3">
+                    <div class="form-group col-md-4">
+                      <label for="s_price">Fiyat (1000 adet)</label>
+                      <input type="number" step="0.01" class="form-control" name="price" id="s_price" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="s_min">Min</label>
+                      <input type="number" class="form-control" name="min" id="s_min" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="s_max">Max</label>
+                      <input type="number" class="form-control" name="max" id="s_max" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="s_type">Tip</label>
+                    <select class="form-control" name="type" id="s_type">
+                      <option value="Default">Default</option>
+                      <option value="custom">Custom</option>
+                      <option value="subscription">Subscription</option>
+                    </select>
+                  </div><br>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="refill" id="s_refill">
+                    <label class="form-check-label" for="s_refill">Refill Destekli</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                  <button type="submit" class="btn btn-primary">Oluştur</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- MODAL -->
+			</div>
+
+			<!-- footer -->
+			<%- include('../partials/_footer.ejs', { page: "services" }) -%>
+			<!-- footer -->

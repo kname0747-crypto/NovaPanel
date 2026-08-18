@@ -55,13 +55,13 @@
                         id="hcaptcha"
                         class="h-captcha"
                         data-sitekey="<%= siteData.site.integrations.captcha.siteKey%>"
-                        data-callback="registerSpeedSmmPanel"
+                        data-callback="registerNovaPanel"
                         data-size="invisible"
                       ></div>
                       <% } else if(siteData.site.integrations.captcha.status && siteData.site.integrations.captcha.service) { %>
                       <div class="g-recaptcha"
                             data-sitekey="<%= siteData.site.integrations.captcha.siteKey%>"
-                            data-callback="registerSpeedSmmPanel"
+                            data-callback="registerNovaPanel"
                             data-size="invisible">
                       </div>
                       <% } %>
@@ -82,7 +82,7 @@
                         <% } else if(siteData.site.integrations.captcha.status && siteData.site.integrations.captcha.service) { %>
                         grecaptcha.execute();
                         <% } else { %>
-                          registerSpeedSmmPanel('a');
+                          registerNovaPanel('a');
                         <% } %>
                         "><%= __('auth.register.submit') %></button>
                       </div>

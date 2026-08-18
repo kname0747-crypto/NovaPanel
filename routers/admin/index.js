@@ -27,6 +27,107 @@ router.get('/orders', checkAdmin, async (req, res) => {
     });
 });
 
+// Katalog yönetimi: sidebar'da "Servisler" linki (/admin/services) zaten vardı
+// ama bu route hiç var olmadığı için 404 veriyordu, ve platform/kategori/servis
+// eklemek için admin panelinde hiçbir CRUD arayüzü bulunmuyordu. Bu, client
+// tarafındaki /new_order ve /services sayfalarının hiçbir zaman gerçek veriyle
+// test edilememesinin asıl nedeniydi.
+router.get('/services', checkAdmin, async (req, res) => {
+    let [platforms, categories, services] = await Promise.all([
+        platformModel.find({}).sort({ queue: 1 }),
+        categoryModel.find({}).sort({ queue: 1 }),
+        serviceModel.find({}).sort({ id: 1 }),
+    ]);
+    res.render('admin/pages/services', {
+        platforms,
+        categories,
+        services,
+        success: req.query.success,
+        message: req.query.message,
+    });
+});
+
+router.post('/services/platform', checkAdmin, async (req, res) => {
+    let { name, queue } = req.body;
+    if (!name) return res.redirect('/admin/services?success=false&message=Platform+adı+gerekli');
+    let last = await platformModel.find({}).sort({ id: -1 }).limit(1);
+    let nextId = last.length ? last[0].id + 1 : 1;
+    await new platformModel({
+        id: nextId,
+        name,
+        queue: Number(queue) || nextId,
+        visible: !!req.body.visible,
+    }).save();
+    return res.redirect('/admin/services?success=true&message=Platform+oluşturuldu');
+});
+
+router.post('/services/platform/:id/delete', checkAdmin, async (req, res) => {
+    let id = Number(req.params.id);
+    // Cascade: platforma bağlı kategoriler ve o kategorilere bağlı servisler de silinir.
+    let cats = await categoryModel.find({ platform: id });
+    let catIds = cats.map(c => c.id);
+    await serviceModel.deleteMany({ category: { $in: catIds } });
+    await categoryModel.deleteMany({ platform: id });
+    await platformModel.deleteOne({ id });
+    return res.redirect('/admin/services?success=true&message=Platform+silindi');
+});
+
+router.post('/services/category', checkAdmin, async (req, res) => {
+    let { name, platform, queue, role, description } = req.body;
+    if (!name || !platform) return res.redirect('/admin/services?success=false&message=Kategori+adı+ve+platform+gerekli');
+    let last = await categoryModel.find({}).sort({ id: -1 }).limit(1);
+    let nextId = last.length ? last[0].id + 1 : 1;
+    await new categoryModel({
+        id: nextId,
+        platform: Number(platform),
+        name,
+        queue: Number(queue) || nextId,
+        visible: !!req.body.visible,
+        role: role || 'all',
+        description: description || '',
+    }).save();
+    return res.redirect('/admin/services?success=true&message=Kategori+oluşturuldu');
+});
+
+router.post('/services/category/:id/delete', checkAdmin, async (req, res) => {
+    let id = Number(req.params.id);
+    await serviceModel.deleteMany({ category: id });
+    await categoryModel.deleteOne({ id });
+    return res.redirect('/admin/services?success=true&message=Kategori+silindi');
+});
+
+router.post('/services/service', checkAdmin, async (req, res) => {
+    let { name, category, price, min, max, type, refill } = req.body;
+    if (!name || !category || !price || !min || !max) return res.redirect('/admin/services?success=false&message=Zorunlu+alanları+doldurunuz');
+    let last = await serviceModel.find({}).sort({ id: -1 }).limit(1);
+    let nextId = last.length ? last[0].id + 1 : 1;
+    await new serviceModel({
+        id: nextId,
+        name,
+        category: Number(category),
+        price: Number(price),
+        min: Number(min),
+        max: Number(max),
+        type: type || 'Default',
+        refill: !!refill,
+        // Bu panelde henüz gerçek bir tedarikçi/child-panel API senkronizasyonu
+        // yok, bu yüzden service.service.* alanlarını (şema zorunlu kılıyor)
+        // servisin kendi id/fiyatıyla dolduruyoruz. Gerçek bir tedarikçi API'si
+        // bağlandığında bu alanlar oradan gelmeli.
+        service: {
+            apiID: 'manual',
+            serviceID: String(nextId),
+            amount: Number(price),
+        },
+    }).save();
+    return res.redirect('/admin/services?success=true&message=Servis+oluşturuldu');
+});
+
+router.post('/services/service/:id/delete', checkAdmin, async (req, res) => {
+    await serviceModel.deleteOne({ id: Number(req.params.id) });
+    return res.redirect('/admin/services?success=true&message=Servis+silindi');
+});
+
 router.get('/statistics', checkAdmin, async (req, res) => {
     let {
         category

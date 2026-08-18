@@ -1,0 +1,71 @@
+<%- include('../partials/_header.ejs') -%>
+
+		<!-- sidebar -->
+    <%- include('../partials/_sidebar.ejs') -%>
+		<!-- sidebar -->
+
+		<div class="page-wrapper">
+
+			<!-- partial:partials/_navbar.html -->
+      <%- include('../partials/_navbar.ejs') -%>
+			<!-- partial -->
+
+      <div class="page-content">
+
+        <div class="row">
+          <div class="col-md-12 grid-margin stretch-card">
+            <div class="card" style="border-radius: 1rem;">
+              <div class="card-body">
+                <h6 class="card-title"><%= __("services.page.title") %></h6>
+                <p class="text-muted mb-3"><%= __("services.page.description") %></p>
+
+                <div class="row mb-3">
+                  <div class="col-md-6 mb-3">
+                    <label for="servicesPlatform" class="form-label"><%= __("services.page.platform") %></label>
+                    <select class="form-select" data-width="100%" id="servicesPlatform">
+                      <% if(platforms.length == 0) { %>
+                        <option value="0"><%= __("services.page.noPlatform") %></option>
+                      <% } %>
+                      <% platforms.forEach((item) => { %>
+                        <option value="<%= item.id %>"><%= item.name %></option>
+                      <% }); %>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="servicesCategory" class="form-label"><%= __("services.page.category") %></label>
+                    <select class="form-select" data-width="100%" id="servicesCategory" disabled>
+                      <option value="0"><%= __("services.page.noCategory") %></option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th><%= __("services.page.table.id") %></th>
+                        <th><%= __("services.page.table.name") %></th>
+                        <th><%= __("services.page.table.min") %></th>
+                        <th><%= __("services.page.table.max") %></th>
+                        <th><%= __("services.page.table.price") %></th>
+                        <th><%= __("services.page.table.type") %></th>
+                        <th><%= __("services.page.table.refill") %></th>
+                      </tr>
+                    </thead>
+                    <tbody id="servicesTableBody">
+                      <tr>
+                        <td colspan="7" style="text-align: center;"><%= __("services.page.selectCategoryFirst") %></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+			<!-- footer -->
+			<%- include('../partials/_footer.ejs', { page: "services" }) -%>
+			<!-- footer -->

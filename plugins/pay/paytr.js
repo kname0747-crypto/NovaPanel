@@ -1,7 +1,7 @@
 module.exports = {
     name: "payTR",
     version: "1.0.0",
-    author: "Can",
+    author: "novapanel",
     run: async function (app, data) {
         if(!data.name || !data.price || !data.currency || !data.email) return { status: false, message: "Lütfen Tüm Alanları Doldurunuz" }
         if(!siteData.virtualPos.payTr.status) return { status: false, message: "PayTR Sanal Posu Aktif Değil" }

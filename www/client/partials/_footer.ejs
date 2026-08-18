@@ -1,6 +1,6 @@
 <!-- <footer class="footer d-flex flex-column flex-md-row align-items-center justify-content-between px-4 py-3 border-top small">
-	<p class="text-muted mb-1 mb-md-0">Copyright © 2023 <a href="https://www.speedsmm.com" target="_blank">SpeedSmm</a>.</p>
-	<p class="text-muted">Can With <i class="mb-1 text-primary ms-1 icon-sm" data-feather="heart"></i></p>
+	<p class="text-muted mb-1 mb-md-0">Copyright © 2026 NovaPanel.</p>
+	<p class="text-muted">Made With <i class="mb-1 text-primary ms-1 icon-sm" data-feather="heart"></i></p>
 </footer> -->
 <%- siteData.site.code.footer %>
 </div>
@@ -47,10 +47,15 @@
 <script src="/client_assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js"></script>
 <script src="/client_assets/panel/orders.js"></script>
 <% } else if(page == 'newOrder') { %>
-	
+
 <script src="/client_assets/vendors/select2/select2.min.js"></script>
 <script src="/client_assets/vendors/jquery-steps/jquery.steps.min.js"></script>
 <script src="/client_assets/panel/newOrder.js"></script>
+
+<% } else if(page == 'services') { %>
+
+<script src="/client_assets/vendors/select2/select2.min.js"></script>
+<script src="/client_assets/panel/services.js"></script>
 
 <% } else if(page == 'auth') { %>
 

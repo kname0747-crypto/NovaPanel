@@ -29,13 +29,13 @@
                         id="hcaptcha"
                         class="h-captcha"
                         data-sitekey="<%= siteData.site.integrations.captcha.siteKey%>"
-                        data-callback="loginSpeedSmmPanel"
+                        data-callback="loginNovaPanel"
                         data-size="invisible"
                       ></div>
                       <% } else if(siteData.site.integrations.captcha.status && siteData.site.integrations.captcha.service) { %>
                       <div class="g-recaptcha"
                             data-sitekey="<%= siteData.site.integrations.captcha.siteKey%>"
-                            data-callback="loginSpeedSmmPanel"
+                            data-callback="loginNovaPanel"
                             data-size="invisible">
                       </div>
                       <% } %>
@@ -48,7 +48,7 @@
                         <% } else if(siteData.site.integrations.captcha.status && siteData.site.integrations.captcha.service) { %>
                         grecaptcha.execute();
                         <% } else { %>
-                          loginSpeedSmmPanel('a');
+                          loginNovaPanel('a');
                         <% } %>
                         "><%= __('auth.login.submit') %></button>
                       </div>

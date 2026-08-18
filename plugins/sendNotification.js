@@ -1,7 +1,7 @@
 module.exports = {
     name: "sendNotification",
     version: "1.0.0",
-    author: "Can",
+    author: "novapanel",
     run: async function (zusers, datax) {
     if (!zusers || !datax) return { status: false, message: "Lütfen tüm alanları doldurunuz 1." }
     if(!datax.title || !datax.message) return { status: false, message: "Lütfen tüm alanları doldurunuz. 2" }

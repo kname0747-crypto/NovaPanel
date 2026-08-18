@@ -3,7 +3,7 @@ let delay = ms => new Promise(res => setTimeout(res, ms));
 module.exports = {
     name: "speedAnalytics",
     version: "1.0.0",
-    author: "Can",
+    author: "novapanel",
     run: async function (category, value) {
         if (!category || !value) {
             console.log("[Plugin] speedAnalytics isimli plugin çalıştırılamadı. Eksik parametreler var.".red);

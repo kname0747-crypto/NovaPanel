@@ -2,7 +2,7 @@ function pageRedirect(window, redirect) {
     window.location.href = window.location.href + redirect;
 }
 
-async function registerSpeedSmmPanel(token) {
+async function registerNovaPanel(token) {
     if(!token) return pageRedirect(window, "?success=false&message=Token Bulunamadı");
     let password = document.getElementById("password")?.value || null;
     let username = document.getElementById("username")?.value;
@@ -40,7 +40,7 @@ async function registerSpeedSmmPanel(token) {
 }
 
 
-async function loginSpeedSmmPanel(token) {
+async function loginNovaPanel(token) {
     if (!token) return pageRedirect(window, "?success=false&message=Token Bulunamadı");
     let password = document.getElementById("password")?.value || null;
     let username = document.getElementById("username")?.value;
